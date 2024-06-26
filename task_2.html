@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>stop watch </title>
+    <style>#stopwatch-container {
+  text-align: center;
+}
+
+#display {
+    display: inline-block;
+    font-size: 50px;
+    height: 70px;
+    width: 300px;
+    padding: 5px auto ;
+    margin: 80px auto;
+     border-radius: 10px;
+    background-color: rgb(201, 227, 241); 
+}
+
+#millisecondsText{
+ display: block;
+ text-align: right ;
+ font-size: 75%;
+ margin-right: 300px;
+ margin-top: -100px;
+}
+
+#controls button {
+  margin-top: 10px;
+  width: 125px;
+  height: 50px;
+  border-radius: 5px;
+   /* color :white; */
+}
+#startBtn{
+    background-color: rgb(51, 113, 247);
+    text-align: center;
+    font-size: larger;
+    margin-right: 20px;
+}
+#clearBtn{
+    background-color: rgb(209, 96, 120);
+    text-align: center;
+    font-size: larger;
+    margin-left: 20px;
+}</style>
+<script>
+    var startTime;
+var elapsedTime = 0;
+var timerInterval;
+var isRunning = false;
+
+function formatTime(milliseconds) {
+    var hours = Math.floor(milliseconds / 3600000);
+    var minutes = Math.floor((milliseconds % 3600000) / 60000);
+    var seconds = Math.floor((milliseconds % 60000) / 1000);
+    var milliseconds = Math.floor(milliseconds % 1000);
+
+    return (
+        (hours < 10 ? '0' + hours : hours) +
+        ':' +
+        (minutes < 10 ? '0' + minutes : minutes) +
+        ':' +
+        (seconds < 10 ? '0' + seconds : seconds)
+    );
+}
+
+function startTimer() {
+    if (!isRunning) {
+        if (elapsedTime === 0) {
+            startTime = Date.now();
+        } else {
+            startTime = Date.now() - elapsedTime;
+        }
+
+        timerInterval = setInterval(function () {
+            var currentTime = Date.now();
+            elapsedTime = currentTime - startTime;
+            display.innerText = formatTime(elapsedTime);
+            milliseconds = elapsedTime % 1000;
+            millisecondsText.innerText = milliseconds;
+            if (milliseconds === 0) {
+                millisecondsText.innerText = '000';
+            }
+        }, 1);
+
+        isRunning = true;
+        startBtn.innerText = 'Pause';
+    } else {
+        clearInterval(timerInterval);
+        isRunning = false;
+        startBtn.innerText = 'Continue';
+    }
+}
+
+function clearTimer() {
+    clearInterval(timerInterval);
+    elapsedTime = 0;
+    display.innerText = formatTime(elapsedTime);
+    millisecondsText.innerText = '000';
+    isRunning = false;
+    startBtn.innerText = 'Start';
+}
+
+
+</script>
+</head>
+
+<body>
+    <div id="stopwatch-container">
+
+        <h2 id="display">00:00:00
+
+        </h2>
+        <p id="millisecondsText">0</p>
+        <div id="controls">
+            <button id="startBtn" onclick="startTimer();">Start</button>
+            <button id="clearBtn" onclick="clearTimer();">Clear</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
